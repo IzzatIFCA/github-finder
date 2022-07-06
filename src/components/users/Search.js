@@ -6,7 +6,8 @@ export class Search extends Component {
     text:''
     };
     
-    static propTypes={
+    static propTypes={ 
+        
         searchUsers: PropTypes.func.isRequired,
         clearUsers: PropTypes.func.isRequired,
         showClear: PropTypes.bool.isRequired,
