@@ -14,9 +14,8 @@ const Search =({searchUsers, showClear, clearUsers, setAlert})=> {
             searchUsers(text);
             setText('');
         }
-        
     }
-
+    
     const onChange = e => setText(e.target.value);
         return(
             <div>
@@ -49,7 +48,6 @@ Search.propTypes={
     clearUsers: PropTypes.func.isRequired,
     showClear: PropTypes.bool.isRequired,
     setAlert: PropTypes.func.isRequired
-    
 };
 
 export default Search;
