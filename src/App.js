@@ -13,8 +13,10 @@ class App extends Component{
   state = {
     users: [],
     user:{},
+    repos: [],
     loading: false,
     alert: null
+    
   }
 
   // async componentDidMount(){
@@ -22,13 +24,15 @@ class App extends Component{
   //   const res = await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID} & client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
   //   this.setState({users:res.data, loading:false});
   // }
-  //search github users
 
+
+  //search github users
   searchUsers = async text => {
     this.setState({loading:true});
     const res = await axios.get(`https://api.github.com/search/users?q=${text}
     &client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
     & client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    
     this.setState({users:res.data.items, loading:false});
   };
 
@@ -38,7 +42,18 @@ class App extends Component{
     const res = await axios.get(`https://api.github.com/users/${username}
     ?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
     & client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    this.setState({user:res.data, loading:false});
+    
+    this.setState({user:res.data, loading:false}); 
+  }
+
+  //get github repos
+  getUserRepos = async username => {
+    this.setState({loading:true});
+    const res = await axios.get(`https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&
+    ?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+    & client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    
+    this.setState({repos:res.data, loading:false});
   }
 
   //clear users
@@ -51,48 +66,50 @@ class App extends Component{
   };
 
   render(){
-    const{user, users, loading} = this.state;
+    const{user, users, loading, repos} = this.state;
 
     return(
       <Router>
         <div className='App'>
           <Navbar/>
           <div className='container'>
-
             <Alert alert={this.state.alert}/>
-            <Switch>
-              <Route 
-                exact path="/"
-                render={props=>(
-                <Fragment>
-                  <Search
-                     {...props}
-                      searchUsers={this.searchUsers}  
-                      clearUsers={this.clearUsers} 
-                      showClear={this.state.users.length > 0 ? true : false}
-                      setAlert={this.setAlert}
-                    />
-                    <Users loading={loading} users={users}/>
-                  </Fragment>
-                )}/>
+              <Switch>
+                
+                <Route 
+                  exact path="/"
+                  render={props=>(
+                  <Fragment>
+                    <Search
+                      {...props}
+                        searchUsers={this.searchUsers}  
+                        clearUsers={this.clearUsers} 
+                        showClear={this.state.users.length > 0 ? true : false}
+                        setAlert={this.setAlert}
+                      />
+                      <Users loading={loading} users={users}/>
+                    </Fragment>
+                  )}/>
 
-              <Route 
-                exact path='/about' 
-                component={About}/>
+                <Route 
+                  exact path='/about' 
+                  component={About}/>
 
-              <Route 
-                exact path='/user/:login' 
-                render={props=>(
-                <User 
-                    {...props} 
-                    getUser={this.getUser} 
-                    user={user} 
-                    loading={loading}
-                    />
-                  )}
-                />
-              
-            </Switch>
+                <Route 
+                  exact path='/user/:login' 
+                  render={props=>(
+                  <User 
+                      {...props} 
+                      getUser={this.getUser} 
+                      getUserRepos={this.getUserRepos}
+                      user={user}
+                      repos={repos}
+                      loading={loading}
+                      />
+                    )}
+                  />
+                
+              </Switch>
           
           </div>
         </div>
