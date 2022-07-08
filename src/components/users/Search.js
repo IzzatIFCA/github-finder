@@ -2,10 +2,9 @@ import React, {useState, useContext} from 'react';
 import GithubContext from '../../context/github/githubContext';
 import AlertContext from '../../context/alert/alertContext';
 
-const Search =({setAlert})=> {
+const Search =()=> {
     const githubContext = useContext(GithubContext);
     const alertContext = useContext(AlertContext);
-
     const [text, setText] = useState('');
 
     const onSubmit = e => {
@@ -16,7 +15,6 @@ const Search =({setAlert})=> {
             githubContext.searchUsers(text);
         }
     }
-    
     const onChange = e => setText(e.target.value);
         return(
             <div>
@@ -27,7 +25,7 @@ const Search =({setAlert})=> {
                         placeholder='Search Users...'
                         value={text}
                         onChange={onChange}
-                    />     
+                    />
 
                     <input 
                         type='submit' 
@@ -42,5 +40,4 @@ const Search =({setAlert})=> {
                 </button>)}
             </div>)
 }
-
 export default Search;
