@@ -31,7 +31,6 @@ const GithubState = (props) => {
   const [state, dispatch] = useReducer(GithubReducer, initialState);
 
   //search user
-
   const searchUsers = async (text) => {
     setLoading();
     const res = await axios.get(
@@ -46,7 +45,6 @@ const GithubState = (props) => {
   };
 
   //get user
-
   const getUser = async (username) => {
     setLoading();
     const res = await axios.get(
